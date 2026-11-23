@@ -72,6 +72,10 @@
 
     <section>
       <h2>How it works</h2>
+      <figure class="fig">
+        <img src="img/overview.webp" width="1210" height="872" alt="Diagram comparing a nearest-text zero-shot classifier with the SVG-3D pipeline: class prompts, CLIP text encoder, Metropolis–Hastings sampling with DiffSplat, pseudo-confusion pair selection and a one-vs-rest RBF SVM." loading="lazy" decoding="async">
+        <figcaption>Top: a standard zero-shot classifier keeps one prompt-averaged centroid per class. Bottom: SVG-3D keeps the encoder frozen and mines a kernel SVM support set along the decision boundary, with DiffSplat as the decoder and a pseudo-confusion matrix choosing the class pairs. (Figure 1 of the paper)</figcaption>
+      </figure>
       <ol class="steps">
         <li><b>Generate shapes from text.</b> DiffSplat, a text-conditioned 3D Gaussian splatting generator, produces samples for each class name.</li>
         <li><b>Pick the confusable pairs.</b> A pseudo-confusion matrix computed only on generated samples selects the top-<span class="math">K</span> class pairs, so the number of sampling chains stays fixed as the class count grows.</li>
@@ -87,6 +91,18 @@
         <li>The gain holds when DiffSplat is replaced with Point-E as the generator.</li>
         <li>On ModelNet-C, in a corruption-aware setting where the corruption family is known, mean accuracy also improves.</li>
       </ul>
+      <figure class="fig">
+        <img src="img/boundary.webp" width="1210" height="440" alt="Left: 2D projection of the chair-versus-rest SVM boundary with support vectors circled. Right: top-1 accuracy over sampling rounds for five ablation settings." loading="lazy" decoding="async">
+        <figcaption>Left: the chair-versus-rest SVM boundary projected to 2D, with support vectors circled along the margin. Right: top-1 accuracy on ScanObjectNN OBJ_ONLY over sampling rounds; the full method (red) tracks the oracle-pair reference. (Figure 2)</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>What the mined supports look like</h2>
+      <figure class="fig">
+        <img src="img/trajectories.webp" width="1185" height="500" alt="Grid of decoded 3D supports: each row moves from a source-class seed on the left to a target-class seed on the right over ten sampling steps." loading="lazy" decoding="async">
+        <figcaption>Each row starts from a source-class seed (left) and moves toward the target class (right) over ten Metropolis–Hastings steps. Later supports look like flattened or partial scans, although no real scan is used anywhere. (Part of Figure 4)</figcaption>
+      </figure>
     </section>
 
     <section id="cite">

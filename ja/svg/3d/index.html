@@ -72,6 +72,10 @@
 
     <section>
       <h2>手法</h2>
+      <figure class="fig">
+        <img src="../../../svg/3d/img/overview.webp" width="1210" height="872" alt="最近傍テキスト型のゼロショット分類器とSVG-3Dの処理の流れを比較した図。" loading="lazy" decoding="async">
+        <figcaption>上：従来のゼロショット分類器は、各クラスをプロンプト平均の重心1点で表します。下：SVG-3D はエンコーダを固定したまま、DiffSplat を復号器に、疑似混同行列でクラス対を選び、決定境界に沿ってカーネルSVMのサポート集合を採掘します。（論文 図1）</figcaption>
+      </figure>
       <ol class="steps">
         <li><b>テキストから形状を生成する</b>テキスト条件付きの3D Gaussian Splatting生成器 DiffSplat が、各クラス名からサンプルを生成します。</li>
         <li><b>混同しやすいクラス対を選ぶ</b>生成サンプルだけで計算した疑似混同行列から、上位 <span class="math">K</span> 組のクラス対を選びます。このため、クラス数が増えてもサンプリング連鎖の本数は一定です。</li>
@@ -87,6 +91,18 @@
         <li>生成器を DiffSplat から Point-E に置き換えても改善を維持。</li>
         <li>ModelNet-C で破損の種類が既知の設定でも、平均精度が向上。</li>
       </ul>
+      <figure class="fig">
+        <img src="../../../svg/3d/img/boundary.webp" width="1210" height="440" alt="左：椅子対その他のSVM決定境界を2次元に射影した図。右：サンプリングの回数に対するTop-1精度の推移。" loading="lazy" decoding="async">
+        <figcaption>左：椅子対その他のSVM決定境界を2次元に射影した図。マージン付近のサポートベクターを丸で示しています。右：ScanObjectNN OBJ_ONLY におけるTop-1精度の推移。提案手法（赤）は、正解のクラス対を与えた参照条件とほぼ同じ軌跡をたどります。（論文 図2）</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>採掘されたサポートの姿</h2>
+      <figure class="fig">
+        <img src="../../../svg/3d/img/trajectories.webp" width="1185" height="500" alt="各行が出発クラスの種から目標クラスの種へ、10ステップで移り変わるサポートの3D形状を並べた図。" loading="lazy" decoding="async">
+        <figcaption>各行は、左端の出発クラスの種から、メトロポリス・ヘイスティングス法の10ステップを経て、右端の目標クラスへ移っていくサポートを示します。後半のサポートは、実データを一切用いていないにもかかわらず、潰れたり欠けたりした実スキャンに近い形になります。（論文 図4の一部）</figcaption>
+      </figure>
     </section>
 
     <section id="cite">

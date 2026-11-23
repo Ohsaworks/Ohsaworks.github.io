@@ -165,3 +165,8 @@ footer .copy { margin-right: auto; }
 :lang(ja) h1 .sub { max-width: 26em; letter-spacing: 0.01em; line-height: 1.45; }
 :lang(ja) .col { max-width: 38rem; }
 :lang(ja) .lede { line-height: 1.8; }
+
+/* Paper figures */
+figure.fig { margin: 1.25rem 0 1.75rem; max-width: 56rem; }
+figure.fig img { display: block; width: 100%; height: auto; background: #fff; border: 1px solid var(--rule); border-radius: 6px; padding: 0.75rem; }
+figure.fig figcaption { margin-top: 0.6rem; max-width: var(--measure); color: var(--muted); font-size: 0.9rem; line-height: 1.55; }
