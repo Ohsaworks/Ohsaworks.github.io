@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SVG-3D：生成スプラッティング事前分布によるゼロショット3D分類 — NeurIPS 2026｜大澤昇平</title>
+<meta name="description" content="SVG-3D は Support Vector Generation を3Dへ拡張した手法。テキストから生成した3D Gaussian Splattingを用い、凍結したエンコーダ上でサポート集合を採掘し、実環境点群でのゼロショット分類の精度差を縮める。NeurIPS 2026 採択。">
+<link rel="canonical" href="https://ohsaworks.com/ja/svg/3d/">
+<link rel="alternate" hreflang="en" href="https://ohsaworks.com/svg/3d/">
+<link rel="alternate" hreflang="ja" href="https://ohsaworks.com/ja/svg/3d/">
+<link rel="alternate" hreflang="x-default" href="https://ohsaworks.com/svg/3d/">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SVG-3D: Mining Decision Boundaries with Generative Splatting Priors for Zero-Shot 3D Classification">
+<meta property="og:description" content="Support Vector Generation の初の3D拡張。NeurIPS 2026（シドニー）でポスター発表。">
+<meta property="og:url" content="https://ohsaworks.com/ja/svg/3d/">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700&family=STIX+Two+Text:ital@1&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../../assets/site.css">
+</head>
+<body>
+<div class="bar">
+  <a class="home" href="../../">大澤昇平</a>
+  <nav aria-label="研究">
+    <a href="../">SVG</a>
+    <a href="./" aria-current="page">SVG-3D</a>
+    <a class="lang" href="../../../svg/3d/" hreflang="en" lang="en">English</a>
+  </nav>
+</div>
+
+<div class="field">
+  <canvas data-boundary="splats" role="img" aria-label="操作できる図：各サンプルをガウス分布の楕円として描き、2クラスをカーネルの決定境界が分け、サポート集合を輪で示す。クリックでサンプルを追加できる。"></canvas>
+  <div class="field-controls">
+    <span class="status" data-status aria-live="polite"></span>
+    <button type="button" class="chip" data-class="1" aria-pressed="true"><span class="dot a"></span>クラスAに追加</button>
+    <button type="button" class="chip" data-class="-1" aria-pressed="false"><span class="dot b"></span>クラスBに追加</button>
+    <button type="button" class="chip" data-reset>リセット</button>
+  </div>
+</div>
+
+<main>
+  <div class="col">
+    <header class="paper">
+      <p class="venue">NeurIPS 2026（シドニー）ポスター発表</p>
+      <h1>SVG-3D
+        <span class="sub">生成スプラッティング事前分布を用いた決定境界のマイニングによる、ゼロショット3D分類</span></h1>
+      <p class="authors">馬上亮<sup>1</sup>、大澤昇平<sup>2</sup></p>
+      <p class="affil"><sup>1</sup> 東京大学 &nbsp; <sup>2</sup> エクイティ・コンサルティング・グループ</p>
+      <ul class="links">
+        <li><a href="https://neurips.cc/virtual/2026/poster/152771">ポスターページ</a></li>
+        <li><span>論文（公開準備中）</span></li>
+        <li><span>コード（公開準備中）</span></li>
+        <li><a href="#cite">BibTeX</a></li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>ポスター発表</h2>
+      <dl class="poster">
+        <dt>日時</dt><dd>2026年12月10日（木）17:00–20:00 AEDT（日本時間 15:00–18:00）</dd>
+        <dt>会場</dt><dd>Hall 1–4、ボード #S3418（シドニー）</dd>
+      </dl>
+    </section>
+
+    <section>
+      <h2>概要</h2>
+      <p class="lede">大規模な事前学習エンコーダに基づくゼロショット3D分類器は、整った合成データでは高い精度を示す一方、実環境のスキャンや破損した点群では精度が大きく下がります。SVG-3D は、エンコーダを固定したまま、生成データだけでこの差を縮めます。クラス名から3D Gaussian Splattingを生成し、凍結したエンコーダ上のカーネルマシンに必要な、少数で識別力の高いサポート集合を採掘します。</p>
+      <p class="note">上の図では、各サンプルをガウス分布の楕円として描いています。境界を決めているのは、輪で囲んだサンプルだけです。</p>
+    </section>
+
+    <section>
+      <h2>手法</h2>
+      <ol class="steps">
+        <li><b>テキストから形状を生成する</b>テキスト条件付きの3D Gaussian Splatting生成器 DiffSplat が、各クラス名からサンプルを生成します。</li>
+        <li><b>混同しやすいクラス対を選ぶ</b>生成サンプルだけで計算した疑似混同行列から、上位 <span class="math">K</span> 組のクラス対を選びます。このため、クラス数が増えてもサンプリング連鎖の本数は一定です。</li>
+        <li><b>サポート集合を採掘する</b>Slerp とガウス分布を組み合わせた提案分布によるメトロポリス・ヘイスティングス法で、テキスト埋め込み空間から境界を支えるサンプルを探索します。</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>主な結果</h2>
+      <ul class="findings">
+        <li>実環境ベンチマークの ScanObjectNN と ScanNet で、OpenShape、Uni3D、ReCon++、DuoduoCLIP などの既存ゼロショット3D分類器を上回る精度。</li>
+        <li>アブレーションにより、改善の大部分がクラス対の選択規則に由来することを確認。</li>
+        <li>生成器を DiffSplat から Point-E に置き換えても改善を維持。</li>
+        <li>ModelNet-C で破損の種類が既知の設定でも、平均精度が向上。</li>
+      </ul>
+    </section>
+
+    <section id="cite">
+      <h2>引用</h2>
+      <div class="cite">
+        <button type="button" data-copy="bib-svg3d">BibTeXをコピー</button>
+<pre id="bib-svg3d">@inproceedings{umagami2026svg3d,
+  title     = {{SVG-3D}: Mining Decision Boundaries with Generative
+               Splatting Priors for Zero-Shot {3D} Classification},
+  author    = {Umagami, Ryo and Ohsawa, Shohei},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {39},
+  year      = {2026}
+}</pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>SVG シリーズ</h2>
+      <ul class="series">
+        <li><span class="yr">2025</span><a href="../">Support Vector Generation<small>言語、NeurIPS 2025</small></a></li>
+        <li><span class="yr">2026</span><span class="here">SVG-3D<small>3D点群、NeurIPS 2026、このページ</small></span></li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <span class="copy">© 2026 馬上亮、大澤昇平</span>
+  <a href="https://scholar.google.com/citations?user=TrFlIx4AAAAJ">Google Scholar</a>
+  <a href="https://researchmap.jp/alembert">researchmap</a>
+  <a href="https://github.com/Ohsaworks">GitHub</a>
+  <a href="https://x.com/Ohsaworks">X</a>
+</footer>
+<script src="../../../assets/boundary.js"></script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SVG-3D — Zero-Shot 3D Classification with Generative Splatting Priors — NeurIPS 2026</title>
+<meta name="description" content="SVG-3D extends Support Vector Generation to 3D: it mines a kernel-machine support set from a frozen encoder with 3D Gaussian splats generated from text, closing the real-world gap in zero-shot point cloud classification. NeurIPS 2026.">
+<link rel="canonical" href="https://ohsaworks.com/svg/3d/">
+<link rel="alternate" hreflang="en" href="https://ohsaworks.com/svg/3d/">
+<link rel="alternate" hreflang="ja" href="https://ohsaworks.com/ja/svg/3d/">
+<link rel="alternate" hreflang="x-default" href="https://ohsaworks.com/svg/3d/">
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SVG-3D: Mining Decision Boundaries with Generative Splatting Priors for Zero-Shot 3D Classification">
+<meta property="og:description" content="The first 3D extension of Support Vector Generation. Poster at NeurIPS 2026, Sydney.">
+<meta property="og:url" content="https://ohsaworks.com/svg/3d/">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700&family=STIX+Two+Text:ital@1&display=swap">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<div class="bar">
+  <a class="home" href="../../">Shohei Ohsawa</a>
+  <nav aria-label="Research">
+    <a href="../">SVG</a>
+    <a href="./" aria-current="page">SVG-3D</a>
+    <a class="lang" href="../../ja/svg/3d/" hreflang="ja" lang="ja">日本語</a>
+  </nav>
+</div>
+
+<div class="field">
+  <canvas data-boundary="splats" role="img" aria-label="Interactive illustration: samples drawn as soft Gaussian splats in two classes, separated by a kernel decision boundary, with the support set ringed. Click to add samples."></canvas>
+  <div class="field-controls">
+    <span class="status" data-status aria-live="polite"></span>
+    <button type="button" class="chip" data-class="1" aria-pressed="true"><span class="dot a"></span>Add to class A</button>
+    <button type="button" class="chip" data-class="-1" aria-pressed="false"><span class="dot b"></span>Add to class B</button>
+    <button type="button" class="chip" data-reset>Reset</button>
+  </div>
+</div>
+
+<main>
+  <div class="col">
+    <header class="paper">
+      <p class="venue">NeurIPS 2026, Sydney, Poster</p>
+      <h1>SVG-3D
+        <span class="sub">Mining decision boundaries with generative splatting priors for zero-shot 3D classification</span></h1>
+      <p class="authors">Ryo Umagami<sup>1</sup> and Shohei Ohsawa<sup>2</sup></p>
+      <p class="affil"><sup>1</sup> The University of Tokyo &nbsp; <sup>2</sup> Equity Consulting Group</p>
+      <ul class="links">
+        <li><a href="https://neurips.cc/virtual/2026/poster/152771">Poster page</a></li>
+        <li><span>Paper — link to be added</span></li>
+        <li><span>Code — link to be added</span></li>
+        <li><a href="#cite">BibTeX</a></li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Meet us at the poster</h2>
+      <dl class="poster">
+        <dt>When</dt><dd>Thursday 10 December 2026, 5:00–8:00 pm AEDT</dd>
+        <dt>Where</dt><dd>Hall 1–4, board #S3418, Sydney</dd>
+      </dl>
+    </section>
+
+    <section>
+      <h2>In one paragraph</h2>
+      <p class="lede">Zero-shot 3D classifiers built on large pretrained encoders do well on clean synthetic shapes and much worse on real scans and corrupted point clouds. SVG-3D narrows that gap without retraining the encoder and without touching target-domain test data. It generates 3D Gaussian splats from class names, then mines a small, discriminative support set for a kernel machine on top of the frozen encoder.</p>
+      <p class="note">The field above draws each sample as a Gaussian splat. Only the ringed ones define the boundary.</p>
+    </section>
+
+    <section>
+      <h2>How it works</h2>
+      <ol class="steps">
+        <li><b>Generate shapes from text.</b> DiffSplat, a text-conditioned 3D Gaussian splatting generator, produces samples for each class name.</li>
+        <li><b>Pick the confusable pairs.</b> A pseudo-confusion matrix computed only on generated samples selects the top-<span class="math">K</span> class pairs, so the number of sampling chains stays fixed as the class count grows.</li>
+        <li><b>Mine the support set.</b> A Metropolis–Hastings sampler with a Slerp-plus-Gaussian proposal searches text-embedding space for the samples that hold up each boundary.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>What the paper shows</h2>
+      <ul class="findings">
+        <li>SVG-3D outperforms prior zero-shot 3D classifiers, including OpenShape, Uni3D, ReCon++ and DuoduoCLIP, on the real-world benchmarks ScanObjectNN and ScanNet.</li>
+        <li>Ablations attribute most of the gain to the pair-selection rule.</li>
+        <li>The gain holds when DiffSplat is replaced with Point-E as the generator.</li>
+        <li>On ModelNet-C, in a corruption-aware setting where the corruption family is known, mean accuracy also improves.</li>
+      </ul>
+    </section>
+
+    <section id="cite">
+      <h2>Cite</h2>
+      <div class="cite">
+        <button type="button" data-copy="bib-svg3d">Copy BibTeX</button>
+<pre id="bib-svg3d">@inproceedings{umagami2026svg3d,
+  title     = {{SVG-3D}: Mining Decision Boundaries with Generative
+               Splatting Priors for Zero-Shot {3D} Classification},
+  author    = {Umagami, Ryo and Ohsawa, Shohei},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {39},
+  year      = {2026}
+}</pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>The SVG series</h2>
+      <ul class="series">
+        <li><span class="yr">2025</span><a href="../">Support Vector Generation<small>Language, NeurIPS 2025</small></a></li>
+        <li><span class="yr">2026</span><span class="here">SVG-3D<small>3D point clouds, NeurIPS 2026, this page</small></span></li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <span class="copy">© 2026 Ryo Umagami and Shohei Ohsawa</span>
+  <a href="https://scholar.google.com/citations?user=TrFlIx4AAAAJ">Google Scholar</a>
+  <a href="https://github.com/Ohsaworks">GitHub</a>
+  <a href="https://x.com/Ohsaworks">X</a>
+</footer>
+<script src="../../assets/boundary.js"></script>
+</body>
+</html>

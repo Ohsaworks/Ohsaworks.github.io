@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Support Vector Generation (SVG) — NeurIPS 2025</title>
+<meta name="description" content="Support Vector Generation turns a frozen language model into an interpretable, training-free classifier whose decisions rest on at most 32 natural-language support vectors. NeurIPS 2025.">
+<link rel="canonical" href="https://ohsaworks.com/svg/">
+<link rel="alternate" hreflang="en" href="https://ohsaworks.com/svg/">
+<link rel="alternate" hreflang="ja" href="https://ohsaworks.com/ja/svg/">
+<link rel="alternate" hreflang="x-default" href="https://ohsaworks.com/svg/">
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Support Vector Generation: Kernelizing Large Language Models for Efficient Zero-Shot NLP">
+<meta property="og:description" content="A training-free classifier built from a frozen language model. Each decision rests on at most 32 sentences. NeurIPS 2025.">
+<meta property="og:url" content="https://ohsaworks.com/svg/">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700&family=STIX+Two+Text:ital@1&display=swap">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<div class="bar">
+  <a class="home" href="../">Shohei Ohsawa</a>
+  <nav aria-label="Research">
+    <a href="./" aria-current="page">SVG</a>
+    <a href="3d/">SVG-3D</a>
+    <a class="lang" href="../ja/svg/" hreflang="ja" lang="ja">日本語</a>
+  </nav>
+</div>
+
+<div class="field">
+  <canvas data-boundary="points" role="img" aria-label="Interactive illustration: two classes of points separated by a kernel decision boundary, with the support vectors ringed. Click to add points."></canvas>
+  <div class="field-controls">
+    <span class="status" data-status aria-live="polite"></span>
+    <button type="button" class="chip" data-class="1" aria-pressed="true"><span class="dot a"></span>Add to class A</button>
+    <button type="button" class="chip" data-class="-1" aria-pressed="false"><span class="dot b"></span>Add to class B</button>
+    <button type="button" class="chip" data-reset>Reset</button>
+  </div>
+</div>
+
+<main>
+  <div class="col">
+    <header class="paper">
+      <p class="venue">NeurIPS 2025, Main Conference Track</p>
+      <h1>Support Vector Generation
+        <span class="sub">Kernelizing large language models for efficient zero-shot NLP</span></h1>
+      <p class="authors">Shohei Ohsawa</p>
+      <ul class="links">
+        <li><a href="https://proceedings.neurips.cc/paper_files/paper/2025/file/8ce291bd0bcbe06da618ac2f630dbaa3-Paper-Conference.pdf">Paper (PDF)</a></li>
+        <li><a href="https://papers.nips.cc/paper_files/paper/2025/hash/8ce291bd0bcbe06da618ac2f630dbaa3-Abstract-Conference.html">Proceedings</a></li>
+        <li><a href="https://slideslive.com/39051787">Talk video</a></li>
+        <li><a href="https://neurips.cc/virtual/2025/poster/115463">Poster page</a></li>
+        <li><a href="#cite">BibTeX</a></li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>In one paragraph</h2>
+      <p class="lede">SVG turns a frozen language model into a classifier without fine-tuning and without a GPU. The model's embedding defines a kernel; a support vector machine is fitted in that kernel space; and the support vectors are ordinary sentences. Every prediction is a weighted vote of at most 32 of them, so the reasons for a decision can be read directly.</p>
+      <p class="note">The field above is the same idea in two dimensions: a few ringed points carry the whole boundary. In SVG, each of those points is a sentence.</p>
+    </section>
+
+    <section>
+      <h2>How it works</h2>
+      <ol class="steps">
+        <li><b>Propose sentences.</b> A Metropolis–Hastings chain explores natural-language sentences as candidate support vectors.</li>
+        <li><b>Fit a kernel machine.</b> A support vector machine is optimised in the reproducing kernel Hilbert space induced by the frozen model's embedding.</li>
+        <li><b>Decide with a short list.</b> Classification uses a weighted combination of at most 32 sentences, which double as a faithful rationale.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>What the paper shows</h2>
+      <ul class="findings">
+        <li>SVG minimises the empirical hinge loss over the span of its supports, with a generalisation bound that does not depend on the size of the language model.</li>
+        <li>On GLUE, it matches or exceeds prompting-based zero-shot baselines across multiple tasks.</li>
+        <li>Training runs on a CPU in under three minutes per task.</li>
+      </ul>
+    </section>
+
+    <section id="cite">
+      <h2>Cite</h2>
+      <div class="cite">
+        <button type="button" data-copy="bib-svg">Copy BibTeX</button>
+<pre id="bib-svg">@inproceedings{ohsawa2025svg,
+  title     = {Support Vector Generation: Kernelizing Large Language
+               Models for Efficient Zero-Shot {NLP}},
+  author    = {Ohsawa, Shohei},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {38},
+  year      = {2025},
+  doi       = {10.52202/085713-3274}
+}</pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>The SVG series</h2>
+      <ul class="series">
+        <li><span class="yr">2025</span><span class="here">Support Vector Generation<small>Language, NeurIPS 2025, this page</small></span></li>
+        <li><span class="yr">2026</span><a href="3d/">SVG-3D: zero-shot 3D classification with generative splatting priors<small>3D point clouds, NeurIPS 2026</small></a></li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <span class="copy">© 2026 Shohei Ohsawa</span>
+  <a href="https://scholar.google.com/citations?user=TrFlIx4AAAAJ">Google Scholar</a>
+  <a href="https://github.com/Ohsaworks">GitHub</a>
+  <a href="https://x.com/Ohsaworks">X</a>
+</footer>
+<script src="../assets/boundary.js"></script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Support Vector Generation（SVG）— NeurIPS 2025｜大澤昇平</title>
+<meta name="description" content="Support Vector Generation は、凍結した言語モデルを、最大32文の自然言語サポートベクターで判断する解釈可能な分類器へ変換する手法。NeurIPS 2025 採択。">
+<link rel="canonical" href="https://ohsaworks.com/ja/svg/">
+<link rel="alternate" hreflang="en" href="https://ohsaworks.com/svg/">
+<link rel="alternate" hreflang="ja" href="https://ohsaworks.com/ja/svg/">
+<link rel="alternate" hreflang="x-default" href="https://ohsaworks.com/svg/">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Support Vector Generation: Kernelizing Large Language Models for Efficient Zero-Shot NLP">
+<meta property="og:description" content="凍結した言語モデルから、学習不要の分類器を構成。各判断の根拠は最大32文。NeurIPS 2025。">
+<meta property="og:url" content="https://ohsaworks.com/ja/svg/">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700&family=STIX+Two+Text:ital@1&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/site.css">
+</head>
+<body>
+<div class="bar">
+  <a class="home" href="../">大澤昇平</a>
+  <nav aria-label="研究">
+    <a href="./" aria-current="page">SVG</a>
+    <a href="3d/">SVG-3D</a>
+    <a class="lang" href="../../svg/" hreflang="en" lang="en">English</a>
+  </nav>
+</div>
+
+<div class="field">
+  <canvas data-boundary="points" role="img" aria-label="操作できる図：2クラスの点をカーネルの決定境界が分け、サポートベクターを輪で示す。クリックで点を追加できる。"></canvas>
+  <div class="field-controls">
+    <span class="status" data-status aria-live="polite"></span>
+    <button type="button" class="chip" data-class="1" aria-pressed="true"><span class="dot a"></span>クラスAに追加</button>
+    <button type="button" class="chip" data-class="-1" aria-pressed="false"><span class="dot b"></span>クラスBに追加</button>
+    <button type="button" class="chip" data-reset>リセット</button>
+  </div>
+</div>
+
+<main>
+  <div class="col">
+    <header class="paper">
+      <p class="venue">NeurIPS 2025 メイン会議トラック</p>
+      <h1>Support Vector Generation
+        <span class="sub">大規模言語モデルのカーネル化による、効率的なゼロショット自然言語処理</span></h1>
+      <p class="authors">大澤昇平</p>
+      <ul class="links">
+        <li><a href="https://proceedings.neurips.cc/paper_files/paper/2025/file/8ce291bd0bcbe06da618ac2f630dbaa3-Paper-Conference.pdf">論文PDF</a></li>
+        <li><a href="https://papers.nips.cc/paper_files/paper/2025/hash/8ce291bd0bcbe06da618ac2f630dbaa3-Abstract-Conference.html">論文集</a></li>
+        <li><a href="https://slideslive.com/39051787">講演動画</a></li>
+        <li><a href="https://neurips.cc/virtual/2025/poster/115463">ポスターページ</a></li>
+        <li><a href="#cite">BibTeX</a></li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>概要</h2>
+      <p class="lede">SVG は、凍結した言語モデルを、重みを固定したまま CPU だけで分類器へ変換する手法です。モデルの埋め込みがカーネルを定め、そのカーネル空間でサポートベクターマシンを学習します。サポートベクターはそのまま読める文であり、各予測は最大32文の重み付き投票で決まります。このため、判断の根拠を直接読み取れます。</p>
+      <p class="note">上の図は、同じ考え方を2次元で示したものです。輪で囲んだ少数の点が境界全体を支えています。SVG では、その一つひとつが文に当たります。</p>
+    </section>
+
+    <section>
+      <h2>手法</h2>
+      <ol class="steps">
+        <li><b>文を提案する</b>メトロポリス・ヘイスティングス法の連鎖が、サポートベクターの候補となる自然言語の文を探索します。</li>
+        <li><b>カーネルマシンを学習する</b>凍結したモデルの埋め込みが誘導する再生核ヒルベルト空間で、サポートベクターマシンを最適化します。</li>
+        <li><b>短いリストで判断する</b>分類は最大32文の重み付き結合で行い、その文がそのまま判断の根拠となります。</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>主な結果</h2>
+      <ul class="findings">
+        <li>サポート集合の張る空間上で経験ヒンジ損失を最小化し、言語モデルの規模と独立な汎化誤差上界を持つことを証明。</li>
+        <li>GLUE の複数タスクで、プロンプトに基づくゼロショット手法と同等以上の精度。</li>
+        <li>学習は CPU のみで、1タスクあたり3分未満で完了。</li>
+      </ul>
+    </section>
+
+    <section id="cite">
+      <h2>引用</h2>
+      <div class="cite">
+        <button type="button" data-copy="bib-svg">BibTeXをコピー</button>
+<pre id="bib-svg">@inproceedings{ohsawa2025svg,
+  title     = {Support Vector Generation: Kernelizing Large Language
+               Models for Efficient Zero-Shot {NLP}},
+  author    = {Ohsawa, Shohei},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {38},
+  year      = {2025},
+  doi       = {10.52202/085713-3274}
+}</pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>SVG シリーズ</h2>
+      <ul class="series">
+        <li><span class="yr">2025</span><span class="here">Support Vector Generation<small>言語、NeurIPS 2025、このページ</small></span></li>
+        <li><span class="yr">2026</span><a href="3d/">SVG-3D：生成スプラッティング事前分布によるゼロショット3D分類<small>3D点群、NeurIPS 2026</small></a></li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <span class="copy">© 2026 大澤昇平</span>
+  <a href="https://scholar.google.com/citations?user=TrFlIx4AAAAJ">Google Scholar</a>
+  <a href="https://researchmap.jp/alembert">researchmap</a>
+  <a href="https://github.com/Ohsaworks">GitHub</a>
+  <a href="https://x.com/Ohsaworks">X</a>
+</footer>
+<script src="../../assets/boundary.js"></script>
+</body>
+</html>
